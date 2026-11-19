@@ -8,15 +8,16 @@ const veneers = servicesData.services.filter((s) => s.category === 'veneers');
 ---
 <section class="spot section" aria-labelledby="spot-title">
   <div class="container spot__grid">
-    <figure class="spot__photo" data-reveal>
+    <figure class="spot__photo zoom" data-stagger>
       <Image
         src={veneerSet}
         alt="A gloved hand holding a full arch of finished veneers on a model, in front of the Smile Precision Dental Clinic logo wall"
         widths={[480, 760, 1212]}
         sizes="(min-width: 1024px) 680px, 100vw"
         loading="lazy"
+        data-reveal="fade"
       />
-      <figcaption class="spot__count glass">
+      <figcaption class="spot__count glass" data-reveal>
         <span class="spot__num">10,000+</span>
         <span>veneer cases at Smile Precision</span>
       </figcaption>
@@ -28,9 +29,9 @@ const veneers = servicesData.services.filter((s) => s.category === 'veneers');
       <p class="spot__lede">
         We choose the most conservative option that gives you the result you want, and we tell you honestly which one that is.
       </p>
-      <ol class="spot__list">
+      <ol class="spot__list" data-stagger>
         {veneers.map((v, i) => (
-          <li>
+          <li data-reveal>
             <a href={`/services#${v.slug}`}>
               <span class="spot__idx">0{i + 1}</span>
               <span class="spot__body">
@@ -103,12 +104,25 @@ const veneers = servicesData.services.filter((s) => s.category === 'veneers');
   .spot__body span { color: var(--on-deep-soft); font-size: var(--text-sm); }
   .spot__go {
     display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    position: relative;
+    isolation: isolate;
     border: 1px solid rgba(255, 255, 255, 0.3);
-    transition: background var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+    transition: transform var(--dur-hover) var(--ease-out);
   }
+  .spot__go::before {
+    content: ''; position: absolute; inset: -1px; z-index: -1; border-radius: 50%;
+    background: var(--brand); opacity: 0; transform: scale(0.6);
+    transition: opacity var(--dur-hover) var(--ease-out), transform var(--dur-hover) var(--ease-out);
+  }
+  .spot__body strong { transition: transform var(--dur-hover) var(--ease-out); }
   .spot__go :global(svg) { width: 18px; height: 18px; }
-  .spot__list a:hover .spot__go,
-  .spot__list a:focus-visible .spot__go { background: var(--brand); border-color: var(--brand); color: var(--ink); }
+  .spot__list a:focus-visible .spot__go { color: var(--ink); }
+  .spot__list a:focus-visible .spot__go::before { opacity: 1; transform: none; }
+  @media (hover: hover) and (pointer: fine) {
+    .spot__list a:hover .spot__go { color: var(--ink); transform: rotate(45deg); }
+    .spot__list a:hover .spot__go::before { opacity: 1; transform: none; }
+    .spot__list a:hover .spot__body strong { transform: translateX(4px); }
+  }
   .spot :focus-visible { outline-color: var(--brand); }
 
   @media (min-width: 1024px) {

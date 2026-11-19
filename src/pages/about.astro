@@ -54,7 +54,7 @@ const values = [
       <h2 class="display h2 values__title" id="values-title" data-reveal>What guides every <span class="accent">treatment</span></h2>
       <ul class="values__grid" data-stagger>
         {values.map((v, i) => (
-          <li class="values__card glass" data-reveal>
+          <li class="values__card glass lift sheen" data-reveal>
             <span class="values__n">0{i + 1}</span>
             <span class="values__icon"><Icon name={v.icon} /></span>
             <h3>{v.title}</h3>
@@ -74,9 +74,9 @@ const values = [
         <h2 class="display h2" id="clinic-title">Calm, bright, and built for <span class="accent">detail</span></h2>
       </header>
       <div class="clinic__grid" data-stagger>
-        <figure class="clinic__main" data-reveal>
-          <Image src={treatmentRoom} alt="A treatment room at Smile Precision with a patient smiling in the chair beside the chairside monitor" widths={[480, 760, 1090]} sizes="(min-width: 1024px) 760px, 100vw" loading="lazy" />
-          <figcaption class="glass-strong">Treatment room</figcaption>
+        <figure class="clinic__main zoom">
+          <Image data-reveal="fade" src={treatmentRoom} alt="A treatment room at Smile Precision with a patient smiling in the chair beside the chairside monitor" widths={[480, 760, 1090]} sizes="(min-width: 1024px) 760px, 100vw" loading="lazy" />
+          <figcaption class="glass-strong" data-reveal>Treatment room</figcaption>
         </figure>
         <!-- PLACEHOLDERS: replace with real photos of the reception / building and the team -->
         <div data-reveal><Placeholder label="Reception & waiting area" icon="pin" ratio="4 / 3" /></div>

@@ -27,20 +27,20 @@ const pageSchema = {
 ---
 <BaseLayout title={`${post.data.title} | ${site.name} blog`} description={post.data.description} pageSchema={pageSchema} ogType="article">
   <article class="post">
-    <header class="post__head bloom">
+    <header class="post__head bloom bloom--fade">
       <div class="container post__narrow">
-        <a class="text-link post__back" href="/blog"><Icon name="arrow" class="flip" /><span>All articles</span></a>
-        <p class="eyebrow">{post.data.category}</p>
-        <h1 class="post__title">{post.data.title}</h1>
-        <p class="post__meta">By {site.dentist} · <time datetime={post.data.date.toISOString()}>{date}</time> · {post.data.readingMinutes} min read</p>
+        <a class="text-link post__back" href="/blog" data-intro style="--d: 80ms"><Icon name="arrow" class="flip" /><span>All articles</span></a>
+        <p class="eyebrow" data-intro style="--d: 160ms">{post.data.category}</p>
+        <h1 class="post__title" data-intro style="--d: 280ms">{post.data.title}</h1>
+        <p class="post__meta" data-intro style="--d: 420ms">By {site.dentist} · <time datetime={post.data.date.toISOString()}>{date}</time> · {post.data.readingMinutes} min read</p>
       </div>
     </header>
 
     <div class="container post__grid">
-      <div class="prose">
+      <div class="prose" data-reveal="fade">
         <Content />
       </div>
-      <aside class="post__aside glass" aria-label="Book a visit">
+      <aside class="post__aside glass" aria-label="Book a visit" data-reveal>
         <p class="post__aside-title">Have a question about your own smile?</p>
         <p>Book a consultation with {site.dentist} in San Fernando.</p>
         <a class="btn btn--ink" href={site.bookingUrl}>Book a visit<span class="btn__chip"><Icon name="arrow" /></span></a>

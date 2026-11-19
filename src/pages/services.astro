@@ -37,8 +37,8 @@ const bookHref = (name: string) => `/contact?service=${encodeURIComponent(name)}
     lede="Veneers are our specialty, with everything around them to keep your smile healthy. Every treatment starts with a consultation and a plan you understand."
   >
     <nav class="jump" aria-label="Service categories">
-      {groups.map((g) => <a class="jump__link glass" href={`#${g.id}`}>{g.name}</a>)}
-      <a class="jump__link glass" href="#results">Real results</a>
+      {groups.map((g) => <a class="jump__link glass sheen" href={`#${g.id}`}>{g.name}</a>)}
+      <a class="jump__link glass sheen" href="#results">Real results</a>
     </nav>
   </PageHeader>
 
@@ -55,12 +55,12 @@ const bookHref = (name: string) => `/contact?service=${encodeURIComponent(name)}
           {g.services.map((s) => {
             const m = media[s.slug];
             return (
-              <article class:list={['svc glass', { 'svc--media': m }]} id={s.slug} data-reveal>
+              <article class:list={['svc glass lift sheen', { 'svc--media': m }]} id={s.slug} data-reveal>
                 {m?.pair && (
                   <CaseCard title="" before={m.pair.before} after={m.pair.after} alt={m.pair.alt} focus={m.pair.focus} layout="side" ratio={s.slug === 'smile-makeover' ? '340 / 470' : '3 / 2'} sizes="(min-width: 1024px) 220px, 45vw" />
                 )}
                 {m?.image && (
-                  <div class:list={['svc__img', { 'svc__img--strip': m.image === whitening }]}>
+                  <div class:list={['svc__img zoom', { 'svc__img--strip': m.image === whitening }]}>
                     <Image src={m.image} alt={m.alt ?? ''} widths={[440, m.image.width]} sizes="(min-width: 1024px) 440px, 90vw" loading="lazy" />
                   </div>
                 )}
@@ -87,7 +87,7 @@ const bookHref = (name: string) => `/contact?service=${encodeURIComponent(name)}
       </header>
       <div class="all__grid" data-stagger>
         {cases.map((c) => (
-          <div class="all__item glass" data-reveal>
+          <div class="all__item glass lift sheen" data-reveal>
             <CaseCard title={c.title} note={c.note} before={c.before} after={c.after} alt={c.alt} focus={c.focus} layout={c.id === 'face' ? 'side' : 'stacked'} sizes="(min-width: 1024px) 400px, 92vw" />
           </div>
         ))}
@@ -103,7 +103,6 @@ const bookHref = (name: string) => `/contact?service=${encodeURIComponent(name)}
     border-radius: var(--radius-pill); text-decoration: none;
     font: 600 var(--text-sm)/1 var(--font-display);
   }
-  .jump__link:hover { background: var(--white); }
 
   .grp--alt { background: var(--mist); }
   .grp__grid { display: grid; gap: var(--space-6); }

@@ -9,10 +9,10 @@ const { compact = false } = Astro.props;
 ---
 <section class:list={['doc section', { 'doc--compact': compact }]} aria-labelledby="doc-title">
   <div class="container doc__grid">
-    <div class="doc__portrait" data-reveal>
+    <div class="doc__portrait" data-stagger>
       <!-- PLACEHOLDER: replace with a real portrait of Dr. Tristan Songco -->
-      <Placeholder label={`Portrait of ${site.dentist}`} icon="smile" ratio="4 / 5" tone="cyan" />
-      <div class="doc__badge glass-strong">
+      <div data-reveal><Placeholder label={`Portrait of ${site.dentist}`} icon="smile" ratio="4 / 5" tone="cyan" /></div>
+      <div class="doc__badge glass-strong" data-reveal>
         <strong>{site.dentist}</strong>
         <span>Lead dentist · internationally trained</span>
       </div>

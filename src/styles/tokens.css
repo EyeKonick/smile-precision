@@ -60,9 +60,12 @@
   --shadow-float: 0 30px 70px -40px rgba(var(--shadow-tint), 0.55);
   --shadow-pill: 0 10px 26px -14px rgba(var(--shadow-tint), 0.45);
 
-  /* motion: calm, no overshoot */
+  /* motion: light but unhurried, like glass coming into focus. Decelerating curves only, nothing overshoots. */
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --dur-reveal: 900ms;
-  --dur-hover: 380ms;
-  --stagger: 90ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);   /* weighted, settling arrival */
+  --dur-reveal: 1100ms;    /* scroll reveals */
+  --dur-hover: 420ms;      /* hover overlays, lifts, drifts */
+  --stagger: 110ms;        /* gap between siblings (capped at 5 steps) */
+  --stagger-base: 160ms;   /* items in a group start after their heading */
+  --shadow-lift: 0 2px 6px rgba(var(--shadow-tint), 0.06), 0 30px 50px -28px rgba(var(--shadow-tint), 0.45);
 }

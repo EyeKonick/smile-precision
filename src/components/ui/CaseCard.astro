@@ -21,11 +21,11 @@ const w = (img: ImageMetadata) => [320, 480, img.width].filter((x, i, a) => x <=
 ---
 <figure class={`case case--${layout}`} style={`--focus: ${focus};${ratio ? ` --ratio: ${ratio}` : ''}`}>
   <div class="case__pair">
-    <div class="case__shot">
+    <div class="case__shot zoom">
       <Image src={before} alt={`Before: ${alt}`} widths={w(before)} sizes={sizes} loading="lazy" />
       <span class="case__tag glass-strong">Before</span>
     </div>
-    <div class="case__shot">
+    <div class="case__shot zoom">
       <Image src={after} alt={`After: ${alt}`} widths={w(after)} sizes={sizes} loading="lazy" />
       <span class="case__tag glass-strong">After</span>
     </div>

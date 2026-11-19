@@ -14,17 +14,17 @@ interface Props {
 }
 const { eyebrow, title, accent, lede, image, imageAlt = '', focus = '50% 50%' } = Astro.props;
 ---
-<section class:list={['ph-head bloom', { 'ph-head--photo': image }]}>
+<section class:list={['ph-head bloom bloom--fade', { 'ph-head--photo': image }]}>
   <div class="container ph-head__grid">
     <div class="ph-head__copy">
-      <p class="eyebrow">{eyebrow}</p>
-      <h1 class="display ph-head__title">{title}{' '}<span class="accent">{accent}</span></h1>
-      {lede && <p class="lede">{lede}</p>}
-      <slot />
+      <p class="eyebrow" data-intro style="--d: 100ms">{eyebrow}</p>
+      <h1 class="display ph-head__title" data-intro style="--d: 240ms">{title}{' '}<span class="accent">{accent}</span></h1>
+      {lede && <p class="lede" data-intro style="--d: 400ms">{lede}</p>}
+      <div class="ph-head__slot" data-intro style="--d: 540ms"><slot /></div>
     </div>
     {image && (
       <figure class="ph-head__frame">
-        <Image src={image} alt={imageAlt} widths={[480, 760, image.width]} sizes="(min-width: 1024px) 560px, 100vw" loading="eager" style={`object-position: ${focus}`} />
+        <Image src={image} alt={imageAlt} widths={[480, 760, image.width]} sizes="(min-width: 1024px) 560px, 100vw" loading="eager" style={`object-position: ${focus}; --d: 120ms`} data-intro="focus" />
       </figure>
     )}
   </div>
@@ -40,9 +40,11 @@ const { eyebrow, title, accent, lede, image, imageAlt = '', focus = '50% 50%' } 
     border-radius: var(--radius-xl);
     overflow: hidden;
     aspect-ratio: 4 / 3;
+    background: var(--mist);
     box-shadow: var(--shadow-float);
   }
   .ph-head__frame :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .ph-head__slot:empty { display: none; }
   @media (min-width: 1024px) {
     .ph-head--photo .ph-head__grid { grid-template-columns: 1.1fr 0.9fr; }
     .ph-head--photo .ph-head__copy { padding-bottom: var(--space-6); }

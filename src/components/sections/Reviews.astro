@@ -19,7 +19,7 @@ import { site } from '../../data/site';
 
       <ul class="rev__list" data-stagger>
         {data.reviews.map((r) => (
-          <li class:list={['rev__card', { 'rev__card--ph': r.placeholder }]} data-reveal>
+          <li class:list={['rev__card lift sheen', { 'rev__card--ph': r.placeholder }]} data-reveal>
             {r.placeholder && <span class="rev__flag">Review placeholder</span>}
             <blockquote>“{r.quote}”</blockquote>
             <p class="rev__who"><strong>{r.name}</strong> · {r.treatment}</p>

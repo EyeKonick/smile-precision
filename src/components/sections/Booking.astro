@@ -21,20 +21,20 @@ const H = headingLevel;
       </p>
 
       <ul class="book__ways" data-stagger>
-        <li data-reveal>
-          <a class="book__way glass" href={`tel:${site.phone.tel}`}>
+        <li>
+          <a class="book__way glass sheen" data-reveal href={`tel:${site.phone.tel}`}>
             <span class="book__icon"><Icon name="phone" /></span>
             <span><small>Call or text</small>{site.phone.display}</span>
           </a>
         </li>
-        <li data-reveal>
-          <a class="book__way glass" href={site.messengerUrl} target="_blank" rel="noopener">
+        <li>
+          <a class="book__way glass sheen" data-reveal href={site.messengerUrl} target="_blank" rel="noopener">
             <span class="book__icon"><Icon name="messenger" /></span>
             <span><small>Message us</small>Facebook Messenger</span>
           </a>
         </li>
-        <li data-reveal>
-          <a class="book__way glass" href={site.mapsUrl} target="_blank" rel="noopener">
+        <li>
+          <a class="book__way glass sheen" data-reveal href={site.mapsUrl} target="_blank" rel="noopener">
             <span class="book__icon"><Icon name="pin" /></span>
             <span><small>{site.address.unit}, {site.address.building}</small>{site.address.street}, San Fernando</span>
           </a>
@@ -61,7 +61,6 @@ const H = headingLevel;
     border-radius: var(--radius-pill);
     text-decoration: none;
     font: 600 var(--text-base)/1.25 var(--font-display);
-    transition: translate var(--dur-hover) var(--ease);
   }
   .book__way small {
     display: block;

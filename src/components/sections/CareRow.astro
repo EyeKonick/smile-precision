@@ -16,8 +16,8 @@ type IconName = Parameters<typeof Icon>[0]['name'];
     </header>
 
     <ul class="care__track" data-stagger aria-label="Other treatments">
-      <li class="care__card care__card--lead glass-strong" data-reveal>
-        <div class="care__photo">
+      <li class="care__card care__card--lead glass-strong lift sheen" data-reveal>
+        <div class="care__photo zoom">
           <Image src={whitening} alt="Three patients mid-treatment during laser whitening, with a blue protective barrier along the gums" widths={[453, 906]} sizes="(min-width: 1024px) 460px, 85vw" loading="lazy" />
         </div>
         <div class="care__text">
@@ -27,7 +27,7 @@ type IconName = Parameters<typeof Icon>[0]['name'];
         </div>
       </li>
       {others.map((s) => (
-        <li class="care__card glass" data-reveal>
+        <li class="care__card glass lift sheen" data-reveal>
           <span class="care__icon"><Icon name={s.icon as IconName} /></span>
           <h3>{s.name}</h3>
           <p>{s.description}</p>

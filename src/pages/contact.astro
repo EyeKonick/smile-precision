@@ -16,22 +16,22 @@ import { site } from '../data/site';
   <section class="ways" aria-label="Ways to reach us">
     <div class="container">
       <ul class="ways__grid" data-stagger>
-        <li class="way glass" data-reveal>
+        <li class="way glass lift sheen" data-reveal>
           <span class="way__icon"><Icon name="phone" /></span>
           <h2>Call or text</h2>
           <a href={`tel:${site.phone.tel}`}>{site.phone.display}</a>
         </li>
-        <li class="way glass" data-reveal>
+        <li class="way glass lift sheen" data-reveal>
           <span class="way__icon"><Icon name="mail" /></span>
           <h2>Email</h2>
           <a href={`mailto:${site.email}`}>{site.email.split('@')[0]}@<wbr />{site.email.split('@')[1]}</a>
         </li>
-        <li class="way glass" data-reveal>
+        <li class="way glass lift sheen" data-reveal>
           <span class="way__icon"><Icon name="messenger" /></span>
           <h2>Messenger</h2>
           <a href={site.messengerUrl} target="_blank" rel="noopener">Message our page</a>
         </li>
-        <li class="way glass" data-reveal>
+        <li class="way glass lift sheen" data-reveal>
           <span class="way__icon"><Icon name="clock" /></span>
           <h2>Hours</h2>
           <p>{site.hours.map((h) => <span>{h.days}: {h.time}<br /></span>)}</p>

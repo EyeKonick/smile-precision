@@ -4,7 +4,7 @@ import Icon from '../ui/Icon.astro';
 import heroPhoto from '../../../images/optimized/hero-patient-chair.webp';
 import { site } from '../../data/site';
 ---
-<section class="hero bloom" aria-labelledby="hero-title">
+<section class="hero bloom bloom--fade" aria-labelledby="hero-title">
   <div class="container hero__grid">
     <figure class="hero__frame">
       <Image
@@ -15,26 +15,28 @@ import { site } from '../../data/site';
         loading="eager"
         fetchpriority="high"
         class="hero__img"
+        data-intro="focus"
+        data-parallax
       />
     </figure>
 
     <div class="hero__copy">
-      <p class="eyebrow">Cosmetic dentistry · San Fernando, Pampanga</p>
-      <h1 class="hero__title display" id="hero-title">
+      <p class="eyebrow" data-intro style="--d: 150ms">Cosmetic dentistry · San Fernando, Pampanga</p>
+      <h1 class="hero__title display" id="hero-title" data-intro style="--d: 300ms">
         Veneers crafted around your <span class="accent">smile</span>
       </h1>
-      <p class="hero__lede">
+      <p class="hero__lede" data-intro style="--d: 480ms">
         Minimal-prep veneers, laser whitening and gentle everyday care by {site.dentist}, on MacArthur Highway.
       </p>
-      <a class="btn btn--white hero__cta" href={site.bookingUrl}>
+      <a class="btn btn--white hero__cta" href={site.bookingUrl} data-intro style="--d: 640ms">
         Book your appointment
         <span class="btn__chip"><Icon name="arrow" /></span>
       </a>
     </div>
 
-    <dl class="hero__stats glass-strong" data-stagger>
-      {site.stats.map((s) => (
-        <div class="hero__stat" data-reveal>
+    <dl class="hero__stats glass-strong" data-intro style="--d: 820ms">
+      {site.stats.map((s, i) => (
+        <div class="hero__stat" data-intro style={`--d: ${1000 + i * 140}ms`}>
           <dt>{s.label}</dt>
           <dd>{s.value}</dd>
         </div>
@@ -54,6 +56,7 @@ import { site } from '../../data/site';
 
   /* mobile first: photo runs edge to edge at the top, copy and stats below */
   .hero__frame {
+    background: var(--mist);
     margin: 0 calc(-1 * var(--gutter));
     margin-top: -92px;
     position: relative;
@@ -74,6 +77,8 @@ import { site } from '../../data/site';
     height: 100%;
     object-fit: cover;
     object-position: 68% 40%;
+    /* rests slightly enlarged so the scroll parallax (translate, set in BaseLayout) never shows an edge */
+    scale: 1.08;
   }
 
   .hero__copy {
