@@ -1,0 +1,9 @@
+{
+  "_note": "PLACEHOLDER slots. Replace each one with a real review from the clinic's Facebook page (copy the text and the reviewer's first name + last initial, with their permission), then set placeholder: false. Never publish invented reviews.",
+  "summary": { "value": "100%", "label": "recommend Smile Precision", "source": "based on 20 Facebook reviews" },
+  "reviews": [
+    { "name": "Patient name", "treatment": "No-prep veneers", "quote": "Paste a real patient review from the Facebook page here.", "placeholder": true },
+    { "name": "Patient name", "treatment": "Laser whitening", "quote": "Paste a real patient review from the Facebook page here.", "placeholder": true },
+    { "name": "Patient name", "treatment": "Composite veneers", "quote": "Paste a real patient review from the Facebook page here.", "placeholder": true }
+  ]
+}

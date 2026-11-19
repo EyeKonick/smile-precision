@@ -1,0 +1,55 @@
+---
+// Frosted gradient stand-in for a photo the clinic hasn't supplied yet. Never a stock photo.
+// Search the codebase for "<Placeholder" to find every slot that still needs a real image.
+import Icon from './Icon.astro';
+
+interface Props {
+  label: string;
+  icon?: Parameters<typeof Icon>[0]['name'];
+  ratio?: string;
+  class?: string;
+  tone?: 'aqua' | 'cyan' | 'deep';
+}
+const { label, icon = 'smile', ratio = '4 / 5', class: className, tone = 'aqua' } = Astro.props;
+---
+<div class:list={['ph', `ph--${tone}`, className]} style={`aspect-ratio: ${ratio}`} role="img" aria-label={`Photo coming soon: ${label}`}>
+  <span class="ph__orb ph__orb--a" aria-hidden="true"></span>
+  <span class="ph__orb ph__orb--b" aria-hidden="true"></span>
+  <span class="ph__card glass">
+    <Icon name={icon} />
+    <span>{label}</span>
+  </span>
+</div>
+
+<style>
+  .ph {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    place-items: end start;
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(150deg, #dff2f6, #bfe5ec 55%, #9fd6d9);
+  }
+  .ph--cyan { background: linear-gradient(150deg, #e3f5fb, #a9def3 60%, #5fc3e8); }
+  .ph--deep { background: linear-gradient(150deg, #24586a, #0e2f3a); }
+  .ph__orb {
+    position: absolute;
+    z-index: -1;
+    border-radius: 50%;
+    filter: blur(6px);
+  }
+  .ph__orb--a { width: 62%; aspect-ratio: 1; top: -12%; right: -14%; background: rgba(255, 255, 255, 0.55); }
+  .ph__orb--b { width: 44%; aspect-ratio: 1; bottom: 8%; left: -10%; background: rgba(13, 169, 224, 0.28); }
+  .ph__card {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: var(--radius-pill);
+    font: 600 var(--text-sm)/1.25 var(--font-display);
+    color: var(--ink);
+  }
+  .ph__card :global(svg) { width: 18px; height: 18px; color: var(--brand-deep); flex: none; }
+</style>

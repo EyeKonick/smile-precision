@@ -1,0 +1,68 @@
+/* Design tokens: the one place colours, type, spacing, radii and motion are defined.
+   Direction: "Frosted Stats". Pale aqua clinic air, deep teal-navy ink, the logo's cyan as the single
+   accent, and frosted white glass for nav, stats, cards and panels. */
+:root {
+  /* colour */
+  --ice: #f5fafb;            /* page ground */
+  --mist: #e8f5f8;           /* quiet aqua fields */
+  --seafoam: #9fd6d9;        /* soft gradient blooms behind glass */
+  --aqua: #c9ecf1;
+  --line: #cfe6eb;           /* hairlines on light grounds */
+  --brand: #0da9e0;          /* the logo cyan: decoration, and text on dark grounds only (2.6:1 on ice, 5.2:1 on deep) */
+  --accent: #098bbd;         /* accent words on light grounds (3.5:1+ on ice/mist, large text only) */
+  --brand-deep: #0a6f97;     /* cyan dark enough for small text, links and icons (5.4:1 on white) */
+  --ink: #0e2f3a;            /* headlines, body, stat numerals (13:1 on white) */
+  --ink-soft: #3f5f69;       /* secondary text (6.6:1 on white, 6:1 on mist) */
+  --white: #ffffff;
+  --deep: #0e2f3a;           /* footer and the dark band */
+  --on-deep-soft: #b9d3da;   /* secondary text on deep (9:1) */
+  --shadow-tint: 14, 47, 58;
+
+  /* glass */
+  --glass: rgba(255, 255, 255, 0.58);
+  --glass-strong: rgba(255, 255, 255, 0.78);
+  --glass-edge: rgba(255, 255, 255, 0.85);
+  --glass-solid: rgba(255, 255, 255, 0.94);   /* fallback where backdrop-filter is unsupported */
+  --blur: 18px;
+
+  /* type */
+  --font-display: 'Outfit Variable', 'Avenir Next', system-ui, sans-serif;
+  --font-text: 'Manrope Variable', 'Segoe UI', system-ui, sans-serif;
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-md: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+  --text-lg: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-xl: clamp(1.875rem, 1.3rem + 2.2vw, 3.25rem);
+  --text-hero: clamp(2.375rem, 1.3rem + 4.4vw, 5rem);
+  --text-stat: clamp(1.875rem, 1.3rem + 2vw, 3.25rem);
+
+  /* space */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 72px;
+  --section-y: clamp(80px, 10vw, 152px);
+  --gutter: clamp(16px, 4vw, 56px);
+  --content: 1280px;
+
+  /* shape */
+  --radius-sm: 14px;
+  --radius-md: 22px;
+  --radius-lg: 32px;
+  --radius-xl: 44px;
+  --radius-pill: 999px;
+  --shadow-glass: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 20px 50px -28px rgba(var(--shadow-tint), 0.35);
+  --shadow-float: 0 30px 70px -40px rgba(var(--shadow-tint), 0.55);
+  --shadow-pill: 0 10px 26px -14px rgba(var(--shadow-tint), 0.45);
+
+  /* motion: calm, no overshoot */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-reveal: 900ms;
+  --dur-hover: 380ms;
+  --stagger: 90ms;
+}

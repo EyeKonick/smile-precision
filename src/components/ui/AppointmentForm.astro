@@ -1,0 +1,338 @@
+---
+import Icon from './Icon.astro';
+import servicesData from '../../data/services.json';
+import { site } from '../../data/site';
+
+const serviceGroups = servicesData.categories
+  .map((cat) => ({
+    name: cat.name,
+    services: servicesData.services.filter((s) => s.category === cat.id),
+  }))
+  .filter((g) => g.services.length > 0);
+---
+<div class="appt" data-appt-root>
+  <form class="appt__form" data-appt-form>
+    <div class="appt__row">
+      <div class="appt__field">
+        <label class="appt__label" for="appt-name">Your name</label>
+        <input
+          id="appt-name"
+          class="appt__input"
+          type="text"
+          name="name"
+          autocomplete="name"
+          placeholder="Maria Santos"
+          required
+        />
+      </div>
+
+      <div class="appt__field">
+        <label class="appt__label" for="appt-phone">Mobile number</label>
+        <input
+          id="appt-phone"
+          class="appt__input"
+          type="tel"
+          name="phone"
+          autocomplete="tel"
+          placeholder="09XX XXX XXXX"
+          required
+        />
+      </div>
+    </div>
+
+    <div class="appt__field">
+      <label class="appt__label" for="appt-service">Treatment needed</label>
+      <select id="appt-service" class="appt__input appt__select" name="service" required data-appt-service>
+        <option value="Consultation (not sure yet)">Not sure yet: start with a consultation</option>
+        {serviceGroups.map((group) => (
+          <optgroup label={group.name}>
+            {group.services.map((service) => (
+              <option value={service.name}>{service.name}</option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+    </div>
+
+    <div class="appt__row">
+      <div class="appt__field">
+        <label class="appt__label" for="appt-date">Preferred date</label>
+        <input
+          id="appt-date"
+          class="appt__input"
+          type="date"
+          name="date"
+          required
+          data-appt-date
+        />
+      </div>
+
+      <div class="appt__field">
+        <label class="appt__label" for="appt-time">Preferred time</label>
+        <select id="appt-time" class="appt__input appt__select" name="timeSlot">
+          <option value="Flexible / Any time">Flexible / Any time</option>
+          <option value="Morning">Morning</option>
+          <option value="Afternoon">Afternoon</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="appt__field">
+      <label class="appt__label" for="appt-notes">Notes or tooth concern <span class="appt__optional">(optional)</span></label>
+      <textarea
+        id="appt-notes"
+        class="appt__input appt__textarea"
+        name="notes"
+        rows="2"
+        placeholder="Tell us briefly what you need or any questions…"
+      ></textarea>
+    </div>
+
+    <button class="btn btn--ink appt__submit" type="submit">
+      <span>Request appointment</span>
+      <span class="btn__chip"><Icon name="arrow" /></span>
+    </button>
+  </form>
+
+  <div class="appt__result" data-appt-result hidden aria-live="polite">
+    <div class="appt__result-head">
+      <span class="appt__badge"><Icon name="check" /></span>
+      <div>
+        <h3>Your appointment request is ready</h3>
+        <p>Choose how you'd like to send this to our reception team:</p>
+      </div>
+    </div>
+
+    <pre class="appt__summary" data-appt-summary></pre>
+
+    <div class="appt__result-actions">
+      <a
+        class="appt__action-btn"
+        href={site.messengerUrl}
+        target="_blank"
+        rel="noopener"
+        data-appt-messenger
+      >
+        <Icon name="messenger" />
+        <span data-appt-messenger-label>Copy & Open Messenger</span>
+      </a>
+      <a class="appt__action-btn" href={`mailto:${site.email}`} data-appt-mailto>
+        <Icon name="mail" />
+        <span>Send via Email</span>
+      </a>
+    </div>
+
+    <div class="appt__result-foot">
+      <button class="appt__copy-btn" type="button" data-appt-copy>Copy details to clipboard</button>
+      <button class="appt__edit-btn" type="button" data-appt-edit>Edit details</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { site } from '../../data/site';
+
+  const root = document.querySelector<HTMLElement>('[data-appt-root]');
+  const form = root?.querySelector<HTMLFormElement>('[data-appt-form]');
+  const resultEl = root?.querySelector<HTMLElement>('[data-appt-result]');
+  const summaryEl = root?.querySelector<HTMLElement>('[data-appt-summary]');
+  const mailtoLink = root?.querySelector<HTMLAnchorElement>('[data-appt-mailto]');
+  const messengerLink = root?.querySelector<HTMLAnchorElement>('[data-appt-messenger]');
+  const messengerLabel = root?.querySelector<HTMLElement>('[data-appt-messenger-label]');
+  const copyBtn = root?.querySelector<HTMLButtonElement>('[data-appt-copy]');
+  const editBtn = root?.querySelector<HTMLButtonElement>('[data-appt-edit]');
+  const dateInput = root?.querySelector<HTMLInputElement>('[data-appt-date]');
+  const serviceSelect = root?.querySelector<HTMLSelectElement>('[data-appt-service]');
+
+  if (dateInput) {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    dateInput.min = `${yyyy}-${mm}-${dd}`;
+  }
+
+  // Links from other pages (service cards, the chatbot) arrive as /contact?service=<name>#book
+  const preselect = (name: string) => {
+    if (!serviceSelect || !name) return false;
+    const match = Array.from(serviceSelect.options).find((opt) => opt.value.toLowerCase() === name.toLowerCase());
+    if (match) serviceSelect.value = match.value;
+    return Boolean(match);
+  };
+  preselect(new URLSearchParams(window.location.search).get('service') ?? '');
+
+  // Allow chatbot or service links to pre-select a treatment in the form via custom event
+  document.addEventListener('select-appointment-service', ((e: CustomEvent<string>) => {
+    if (preselect(e.detail)) {
+      if (form && resultEl && !resultEl.hidden) {
+        resultEl.hidden = true;
+        form.hidden = false;
+      }
+    }
+  }) as EventListener);
+
+  if (form && resultEl && summaryEl && mailtoLink && messengerLink && messengerLabel && copyBtn && editBtn) {
+    let formattedMessage = '';
+
+    const formatReadableDate = (isoDate: string): string => {
+      if (!isoDate) return 'Flexible';
+      const parts = isoDate.split('-').map(Number);
+      if (parts.length !== 3) return isoDate;
+      const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+      return dateObj.toLocaleDateString('en-PH', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    };
+
+    const copyToClipboard = async (text: string): Promise<boolean> => {
+      try {
+        await navigator.clipboard.writeText(text);
+        return true;
+      } catch {
+        return false;
+      }
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '').trim();
+      const phone = String(data.get('phone') ?? '').trim();
+      const service = String(data.get('service') ?? '').trim();
+      const date = formatReadableDate(String(data.get('date') ?? '').trim());
+      const timeSlot = String(data.get('timeSlot') ?? '').trim();
+      const notes = String(data.get('notes') ?? '').trim();
+
+      const lines = [
+        `Appointment Request — ${site.name}`,
+        `Name: ${name}`,
+        `Phone: ${phone}`,
+        `Treatment: ${service}`,
+        `Preferred Date: ${date} (${timeSlot})`,
+      ];
+      if (notes) {
+        lines.push(`Notes: ${notes}`);
+      }
+
+      formattedMessage = lines.join('\n');
+      summaryEl.textContent = formattedMessage;
+
+      const subject = encodeURIComponent(`Appointment Request: ${service} — ${name}`);
+      const body = encodeURIComponent(formattedMessage);
+      mailtoLink.href = `mailto:${site.email}?subject=${subject}&body=${body}`;
+
+      form.hidden = true;
+      resultEl.hidden = false;
+    });
+
+    messengerLink.addEventListener('click', async () => {
+      const copied = await copyToClipboard(formattedMessage);
+      if (copied) {
+        const orig = messengerLabel.textContent;
+        messengerLabel.textContent = 'Copied! Paste in Messenger';
+        window.setTimeout(() => {
+          messengerLabel.textContent = orig;
+        }, 3500);
+      }
+    });
+
+    copyBtn.addEventListener('click', async () => {
+      const copied = await copyToClipboard(formattedMessage);
+      if (copied) {
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = 'Copied to clipboard!';
+        window.setTimeout(() => {
+          copyBtn.textContent = orig;
+        }, 2500);
+      }
+    });
+
+    editBtn.addEventListener('click', () => {
+      resultEl.hidden = true;
+      form.hidden = false;
+      form.querySelector<HTMLInputElement>('input')?.focus();
+    });
+  }
+</script>
+
+<style>
+  .appt { width: 100%; }
+  .appt__form { display: grid; gap: var(--space-4); }
+  .appt__form[hidden], .appt__result[hidden] { display: none; }
+  .appt__row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .appt__field { display: flex; flex-direction: column; gap: 6px; }
+  .appt__label { font: 600 var(--text-sm)/1.2 var(--font-display); color: var(--ink); }
+  .appt__optional { font: 400 var(--text-xs) var(--font-text); color: var(--ink-soft); }
+
+  .appt__input {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
+    font: 400 var(--text-base)/1.35 var(--font-text);
+    transition: border-color var(--dur-hover) var(--ease), box-shadow var(--dur-hover) var(--ease);
+  }
+  .appt__input::placeholder { color: var(--ink-soft); opacity: 0.8; }
+  .appt__input:hover { border-color: var(--seafoam); }
+  .appt__input:focus-visible { outline: none; border-color: var(--brand-deep); box-shadow: 0 0 0 3px rgba(10, 111, 151, 0.25); }
+  .appt__select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%230e2f3a' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 40px;
+  }
+  .appt__textarea { resize: vertical; min-height: 84px; }
+  .appt__submit { justify-content: space-between; width: 100%; margin-top: var(--space-2); }
+
+  .appt__result { display: flex; flex-direction: column; gap: var(--space-4); }
+  .appt__result-head { display: flex; align-items: flex-start; gap: var(--space-3); }
+  .appt__badge {
+    flex: none; width: 40px; height: 40px; border-radius: 50%;
+    background: var(--brand); color: var(--ink); display: grid; place-items: center;
+  }
+  .appt__badge :global(svg) { width: 22px; height: 22px; }
+  .appt__result-head h3 { font-size: var(--text-lg); }
+  .appt__result-head p { margin-top: 4px; font-size: var(--text-sm); color: var(--ink-soft); }
+  .appt__summary {
+    margin: 0;
+    padding: var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--mist);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font: 400 var(--text-sm)/1.6 var(--font-text);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .appt__result-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .appt__action-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 48px; padding: 0 22px; border-radius: var(--radius-pill);
+    background: var(--ink); color: var(--white); text-decoration: none;
+    font: 600 0.9375rem/1 var(--font-display);
+    transition: translate var(--dur-hover) var(--ease);
+  }
+  .appt__action-btn + .appt__action-btn { background: var(--white); color: var(--ink); box-shadow: inset 0 0 0 1.5px var(--line); }
+  .appt__action-btn :global(svg) { width: 18px; height: 18px; flex: none; }
+  @media (hover: hover) and (pointer: fine) { .appt__action-btn:hover { translate: 0 -2px; } }
+  .appt__result-foot {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3);
+    padding-top: var(--space-3); border-top: 1px solid var(--line);
+  }
+  .appt__copy-btn, .appt__edit-btn {
+    background: none; border: 0; padding: 4px 0; min-height: 44px; cursor: pointer;
+    font: 600 var(--text-sm)/1.2 var(--font-text); color: var(--brand-deep);
+    text-decoration: underline; text-underline-offset: 3px;
+  }
+  @media (max-width: 640px) {
+    .appt__row { grid-template-columns: 1fr; }
+    .appt__action-btn { width: 100%; }
+  }
+</style>

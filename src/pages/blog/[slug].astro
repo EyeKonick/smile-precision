@@ -1,0 +1,87 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { site } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date.toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
+const base = Astro.site ?? new URL(site.url);
+
+const pageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.date.toISOString(),
+  author: { '@type': 'Person', name: site.dentist },
+  publisher: { '@type': 'Dentist', name: site.legalName },
+  mainEntityOfPage: new URL(Astro.url.pathname, base).href,
+};
+---
+<BaseLayout title={`${post.data.title} | ${site.name} blog`} description={post.data.description} pageSchema={pageSchema} ogType="article">
+  <article class="post">
+    <header class="post__head bloom">
+      <div class="container post__narrow">
+        <a class="text-link post__back" href="/blog"><Icon name="arrow" class="flip" /><span>All articles</span></a>
+        <p class="eyebrow">{post.data.category}</p>
+        <h1 class="post__title">{post.data.title}</h1>
+        <p class="post__meta">By {site.dentist} · <time datetime={post.data.date.toISOString()}>{date}</time> · {post.data.readingMinutes} min read</p>
+      </div>
+    </header>
+
+    <div class="container post__grid">
+      <div class="prose">
+        <Content />
+      </div>
+      <aside class="post__aside glass" aria-label="Book a visit">
+        <p class="post__aside-title">Have a question about your own smile?</p>
+        <p>Book a consultation with {site.dentist} in San Fernando.</p>
+        <a class="btn btn--ink" href={site.bookingUrl}>Book a visit<span class="btn__chip"><Icon name="arrow" /></span></a>
+        <a class="post__call" href={`tel:${site.phone.tel}`}><Icon name="phone" />{site.phone.display}</a>
+      </aside>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .post__head { padding: 140px 0 var(--space-7); }
+  .post__narrow { max-width: 860px; display: grid; gap: var(--space-4); justify-items: start; }
+  .post__back { color: var(--ink); }
+  .post__back :global(.flip) { rotate: 180deg; order: -1; }
+  .post__title { font-size: clamp(2rem, 1.3rem + 2.8vw, 3.5rem); line-height: 1.05; letter-spacing: -0.02em; }
+  .post__meta { color: var(--ink-soft); font-size: var(--text-sm); }
+
+  .post__grid { display: grid; gap: var(--space-7); padding-block: var(--space-7) var(--section-y); }
+  .post__aside {
+    display: grid; gap: var(--space-3); justify-items: start; align-self: start;
+    padding: var(--space-5); border-radius: var(--radius-lg);
+  }
+  .post__aside-title { font: 600 var(--text-lg)/1.2 var(--font-display); }
+  .post__aside p:not(.post__aside-title) { color: var(--ink-soft); font-size: var(--text-sm); }
+  .post__call { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 600; text-decoration: none; }
+  .post__call :global(svg) { width: 16px; height: 16px; color: var(--brand-deep); }
+
+  .prose { max-width: 68ch; font-size: 1.0625rem; line-height: 1.75; }
+  .prose :global(> * + *) { margin-top: 1.1em; }
+  .prose :global(h2) { font-size: var(--text-lg); margin-top: 2em; }
+  .prose :global(ul), .prose :global(ol) { padding-left: 1.3em; }
+  .prose :global(ul) { list-style: disc; }
+  .prose :global(ol) { list-style: decimal; }
+  .prose :global(li + li) { margin-top: 0.4em; }
+  .prose :global(li::marker) { color: var(--brand-deep); }
+  .prose :global(strong) { color: var(--ink); }
+  .prose :global(em) { color: var(--ink-soft); }
+  .prose :global(p:last-child) { padding: var(--space-4) var(--space-5); border-radius: var(--radius-md); background: var(--mist); }
+
+  @media (min-width: 1024px) {
+    .post__grid { grid-template-columns: minmax(0, 1fr) 320px; gap: var(--space-8); max-width: 1100px; }
+    .post__aside { position: sticky; top: 120px; }
+  }
+</style>

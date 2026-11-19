@@ -1,0 +1,119 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import logoWhite from '../../../images/optimized/logo-white.png';
+import { site, nav } from '../../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="ftr">
+  <div class="container">
+    <div class="ftr__top">
+      <p class="ftr__line display">Ready when your <span class="accent">smile</span> is.</p>
+      <a class="btn btn--white" href={site.bookingUrl}>Book your appointment<span class="btn__chip"><Icon name="arrow" /></span></a>
+    </div>
+
+    <div class="ftr__grid">
+      <div class="ftr__brand">
+        <Image src={logoWhite} alt={site.legalName} widths={[190, 380]} sizes="190px" class="ftr__logo" />
+        <p>{site.tagline}</p>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Visit</h2>
+        <address>
+          {site.addressLine}<br />{site.cityLine}
+        </address>
+        <a class="ftr__link" href={site.mapsUrl} target="_blank" rel="noopener">Get directions<Icon name="arrow-up-right" /></a>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Talk to us</h2>
+        <ul class="ftr__list">
+          <li><a href={`tel:${site.phone.tel}`}>{site.phone.display}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href={site.messengerUrl} target="_blank" rel="noopener">Messenger</a> · <a href={site.facebookUrl} target="_blank" rel="noopener">Facebook</a> · <a href={site.instagramUrl} target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h2 class="ftr__h">Hours</h2>
+        <ul class="ftr__list">
+          {site.hours.map((h) => <li><span>{h.days}</span><br />{h.time}</li>)}
+        </ul>
+      </div>
+
+      <nav aria-label="Footer">
+        <h2 class="ftr__h">Pages</h2>
+        <ul class="ftr__list">
+          {nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+        </ul>
+      </nav>
+    </div>
+
+    <p class="ftr__legal">© {year} {site.legalName}. City of San Fernando, Pampanga.</p>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    position: relative;
+    overflow: hidden;
+    --accent: var(--brand);   /* bright logo cyan on dark (5.2:1) */
+    background: var(--deep);
+    color: var(--white);
+    padding: var(--space-8) 0 calc(var(--space-6) + 72px); /* room for the chat launcher */
+  }
+  .ftr::before {
+    content: '';
+    position: absolute;
+    width: 720px; height: 720px;
+    right: -260px; top: -380px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(13, 169, 224, 0.28), transparent);
+    pointer-events: none;
+  }
+  .ftr__top {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-5);
+    padding-bottom: var(--space-7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .ftr__line { font-size: var(--text-xl); max-width: 14ch; }
+  .ftr__grid {
+    display: grid;
+    gap: var(--space-6);
+    padding-block: var(--space-7);
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  }
+  .ftr__brand { grid-column: 1 / -1; max-width: 340px; }
+  .ftr__brand p { margin-top: var(--space-3); color: var(--on-deep-soft); font-size: var(--text-sm); }
+  .ftr__logo { width: 190px; height: auto; }
+  .ftr__h {
+    font: 600 var(--text-xs)/1 var(--font-display);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--seafoam);
+    margin-bottom: var(--space-4);
+  }
+  address, .ftr__list { color: var(--on-deep-soft); font-size: var(--text-sm); line-height: 1.7; }
+  .ftr__list { display: grid; gap: var(--space-2); }
+  .ftr__list span { color: var(--white); }
+  .ftr a:not(.btn) { color: var(--white); text-decoration: none; }
+  .ftr__list a:hover { text-decoration: underline; }
+  .ftr__link {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px; white-space: nowrap;
+    font-weight: 600; font-size: var(--text-sm);
+  }
+  .ftr__link :global(svg) { width: 16px; height: 16px; color: var(--brand); }
+  .ftr__legal { font-size: var(--text-xs); color: var(--on-deep-soft); }
+  .ftr :focus-visible { outline-color: var(--brand); }
+
+  @media (min-width: 1024px) {
+    .ftr__grid { grid-template-columns: 1.4fr 1fr 1fr 1fr 0.7fr; }
+    .ftr__brand { grid-column: auto; }
+  }
+</style>

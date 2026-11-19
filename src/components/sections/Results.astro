@@ -1,0 +1,63 @@
+---
+import CompareSlider from '../ui/CompareSlider.astro';
+import CaseCard from '../ui/CaseCard.astro';
+import Icon from '../ui/Icon.astro';
+import { cases } from '../../data/cases';
+
+const [feature, ...rest] = cases;
+const side = rest.slice(0, 2);
+---
+<section class="res section" id="smiles" aria-labelledby="res-title">
+  <div class="container">
+    <header class="res__head" data-reveal>
+      <div>
+        <p class="eyebrow">Real patients · real results</p>
+        <h2 class="display h2" id="res-title">Smiles we’ve <span class="accent">shaped</span></h2>
+      </div>
+      <div class="res__aside">
+        <p>Every photo here is a patient of ours, shared on our Facebook page. No stock images, no filters.</p>
+        <a class="text-link" href="/services#results"><span>See every case</span><Icon name="arrow" /></a>
+      </div>
+    </header>
+
+    <div class="res__grid">
+      <figure class="res__feature" data-reveal>
+        <CompareSlider before={feature.before} after={feature.after} alt={feature.alt} label={feature.title} focus={feature.focus} />
+        <figcaption>
+          <strong>{feature.title}</strong>
+          <span>{feature.note} Drag the handle to compare.</span>
+        </figcaption>
+      </figure>
+
+      <div class="res__side" data-stagger>
+        {side.map((c) => (
+          <div data-reveal>
+            <CaseCard title={c.title} note={c.note} before={c.before} after={c.after} alt={c.alt} focus={c.focus} layout="side" ratio="3 / 2" sizes="(min-width: 1024px) 250px, 50vw" />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .res__head {
+    display: grid;
+    gap: var(--space-5);
+    margin-bottom: var(--space-7);
+  }
+  .res__head .eyebrow { margin-bottom: var(--space-3); }
+  .res__aside { display: grid; gap: var(--space-2); justify-items: start; max-width: 42ch; color: var(--ink-soft); }
+  .res__grid { display: grid; gap: var(--space-6); }
+  .res__feature { margin: 0; display: grid; gap: var(--space-3); }
+  .res__feature figcaption { display: grid; gap: 2px; }
+  .res__feature strong { font: 600 var(--text-lg)/1.3 var(--font-display); }
+  .res__feature span { color: var(--ink-soft); font-size: var(--text-sm); }
+  .res__side { display: grid; gap: var(--space-6); align-content: start; }
+
+  @media (min-width: 1024px) {
+    .res__head { grid-template-columns: 1fr auto; align-items: end; }
+    .res__grid { grid-template-columns: 7fr 5fr; gap: var(--space-7); align-items: start; }
+    .res__side { padding-top: var(--space-7); }
+  }
+</style>

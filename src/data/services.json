@@ -1,0 +1,30 @@
+{
+  "_note": "confirmed: true = shown on the clinic's Facebook posts. confirmed: false = assumed from 'multi-specialty treatment'; confirm with the clinic before launch. There is no price field on purpose.",
+  "categories": [
+    { "id": "veneers", "name": "Veneers", "blurb": "Our specialty. Over 10,000 veneer cases, from no-drill shells to full porcelain smiles." },
+    { "id": "cosmetic", "name": "Whitening & makeovers", "blurb": "Brighter, more even smiles without changing what makes yours yours." },
+    { "id": "general", "name": "Everyday dentistry", "blurb": "Conservative care that keeps the rest of your mouth healthy." }
+  ],
+  "services": [
+    { "slug": "no-prep-veneers", "name": "No-prep veneers", "category": "veneers", "icon": "diamond", "confirmed": true,
+      "description": "Thin veneers bonded onto your teeth with no drilling and no tooth reduction. Minimally invasive, natural looking, and your tooth structure stays intact." },
+    { "slug": "composite-veneers", "name": "Direct composite veneers", "category": "veneers", "icon": "layers", "confirmed": true,
+      "description": "Tooth-coloured composite shaped by hand right on your teeth in the chair. Closes gaps, fixes chips and evens out shape, often in a single visit." },
+    { "slug": "porcelain-veneers", "name": "Porcelain veneers", "category": "veneers", "icon": "tooth", "confirmed": false,
+      "description": "Custom ceramic shells made from a model of your teeth, for a durable, stain-resistant smile with a natural glassy finish." },
+    { "slug": "laser-whitening", "name": "Laser teeth whitening", "category": "cosmetic", "icon": "sparkle", "confirmed": true,
+      "description": "In-clinic whitening with a protective gum barrier and a light-activated gel. Visibly whiter teeth in one session." },
+    { "slug": "smile-makeover", "name": "Smile makeover", "category": "cosmetic", "icon": "smile", "confirmed": false,
+      "description": "A full plan that combines veneers, whitening and reshaping so your whole smile fits your face, not just one tooth." },
+    { "slug": "consultation", "name": "Consultation & check-up", "category": "general", "icon": "search", "confirmed": false,
+      "description": "A careful look at your teeth and gums, an honest talk about options, and a plan you understand before anything starts." },
+    { "slug": "cleaning", "name": "Cleaning", "category": "general", "icon": "drop", "confirmed": false,
+      "description": "Scaling and polishing to remove plaque and tartar, and the best way to keep veneers and natural teeth looking good." },
+    { "slug": "fillings", "name": "Fillings", "category": "general", "icon": "shield", "confirmed": false,
+      "description": "Tooth-coloured fillings that repair decay while saving as much healthy tooth as possible." },
+    { "slug": "extraction", "name": "Tooth extraction", "category": "general", "icon": "extract", "confirmed": false,
+      "description": "Gentle removal of teeth that can't be saved, including wisdom teeth, with clear aftercare." },
+    { "slug": "braces", "name": "Braces", "category": "general", "icon": "align", "confirmed": false,
+      "description": "Orthodontic treatment to straighten teeth and correct your bite, on its own or before veneers." }
+  ]
+}

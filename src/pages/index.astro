@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/sections/Hero.astro';
+import Results from '../components/sections/Results.astro';
+import VeneerSpotlight from '../components/sections/VeneerSpotlight.astro';
+import CareRow from '../components/sections/CareRow.astro';
+import Doctor from '../components/sections/Doctor.astro';
+import Reviews from '../components/sections/Reviews.astro';
+import Booking from '../components/sections/Booking.astro';
+import { site } from '../data/site';
+---
+<BaseLayout title={`${site.legalName} | Veneers & cosmetic dentistry in San Fernando, Pampanga`} description={site.description}>
+  <Hero />
+  <Results />
+  <VeneerSpotlight />
+  <CareRow />
+  <Doctor />
+  <Reviews />
+  <Booking />
+</BaseLayout>

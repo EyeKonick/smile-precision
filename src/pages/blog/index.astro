@@ -1,0 +1,88 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHeader from '../../components/ui/PageHeader.astro';
+import Placeholder from '../../components/ui/Placeholder.astro';
+import Icon from '../../components/ui/Icon.astro';
+import { site } from '../../data/site';
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p !== featured);
+const fmt = (d: Date) => d.toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
+type IconName = Parameters<typeof Icon>[0]['name'];
+const coverIcon: Record<string, IconName> = { Veneers: 'diamond', Whitening: 'sparkle', Aftercare: 'shield' };
+---
+<BaseLayout title={`Blog | Smile tips from ${site.legalName}`} description="Plain-language guides on veneers, laser whitening and aftercare from Smile Precision Dental Clinic in San Fernando, Pampanga.">
+  <PageHeader
+    eyebrow="Blog"
+    title="Notes from the"
+    accent="chair"
+    lede="Straight answers to the questions patients ask us most, about veneers, whitening and keeping your smile looking its best."
+  />
+
+  <section class="blog section">
+    <div class="container">
+      <article class="feat glass" data-reveal>
+        <!-- PLACEHOLDER cover image -->
+        <Placeholder label={`Cover photo: ${featured.data.category}`} icon={coverIcon[featured.data.category] ?? 'smile'} ratio="16 / 10" tone="cyan" class="feat__cover" />
+        <div class="feat__body">
+          <p class="meta"><span>{featured.data.category}</span> · {fmt(featured.data.date)} · {featured.data.readingMinutes} min read</p>
+          <h2 class="feat__title"><a href={`/blog/${featured.id}`}>{featured.data.title}</a></h2>
+          <p class="feat__desc">{featured.data.description}</p>
+          <span class="text-link" aria-hidden="true"><span>Read the article</span><Icon name="arrow" /></span>
+        </div>
+      </article>
+
+      <ul class="list" data-stagger>
+        {rest.map((p) => (
+          <li class="card" data-reveal>
+            <Placeholder label={`Cover photo: ${p.data.category}`} icon={coverIcon[p.data.category] ?? 'smile'} ratio="3 / 2" />
+            <p class="meta"><span>{p.data.category}</span> · {p.data.readingMinutes} min read</p>
+            <h2 class="card__title"><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
+            <p class="card__desc">{p.data.description}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog .container { display: grid; gap: var(--space-7); }
+  .meta { font-size: var(--text-xs); color: var(--ink-soft); letter-spacing: 0.02em; }
+  .meta span { font-weight: 700; color: var(--brand-deep); text-transform: uppercase; letter-spacing: 0.12em; }
+
+  /* whole card is clickable via the title link's ::after */
+  .feat, .card { position: relative; }
+  .feat__title a::after, .card__title a::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
+  .feat__title a, .card__title a { text-decoration: none; }
+  .feat:focus-within, .card:focus-within { outline: 3px solid var(--brand-deep); outline-offset: 4px; }
+  .feat__title a:focus-visible, .card__title a:focus-visible { outline: none; }
+
+  .feat {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-3);
+    border-radius: var(--radius-xl);
+  }
+  .feat__body { display: grid; gap: var(--space-3); padding: var(--space-3) var(--space-3) var(--space-4); justify-items: start; }
+  .feat__title { font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.5rem); line-height: 1.1; }
+  .feat__desc { color: var(--ink-soft); font-size: var(--text-md); max-width: 50ch; }
+
+  .list { display: grid; gap: var(--space-6); }
+  .card { display: grid; gap: var(--space-3); border-radius: var(--radius-lg); }
+  .card__title { font-size: var(--text-lg); line-height: 1.2; }
+  .card__desc { color: var(--ink-soft); font-size: var(--text-sm); }
+  @media (hover: hover) and (pointer: fine) {
+    .card:hover .card__title a, .feat:hover .feat__title a { color: var(--brand-deep); }
+  }
+
+  @media (min-width: 760px) {
+    .list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .feat { grid-template-columns: 1.2fr 1fr; align-items: center; }
+    .feat__body { padding: var(--space-6); }
+  }
+</style>

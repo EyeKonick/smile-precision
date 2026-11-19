@@ -1,0 +1,103 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Booking from '../components/sections/Booking.astro';
+import Icon from '../components/ui/Icon.astro';
+import { site } from '../data/site';
+---
+<BaseLayout title={`Contact & booking | ${site.legalName}, San Fernando, Pampanga`} description={`Book an appointment at Smile Precision Dental Clinic, ${site.addressLine}, ${site.cityLine}. Call or text ${site.phone.display}.`}>
+  <PageHeader
+    eyebrow="Contact"
+    title="Come see us in"
+    accent="San Fernando"
+    lede="Call, text, message or send the booking form. We’ll reply to confirm your time."
+  />
+
+  <section class="ways" aria-label="Ways to reach us">
+    <div class="container">
+      <ul class="ways__grid" data-stagger>
+        <li class="way glass" data-reveal>
+          <span class="way__icon"><Icon name="phone" /></span>
+          <h2>Call or text</h2>
+          <a href={`tel:${site.phone.tel}`}>{site.phone.display}</a>
+        </li>
+        <li class="way glass" data-reveal>
+          <span class="way__icon"><Icon name="mail" /></span>
+          <h2>Email</h2>
+          <a href={`mailto:${site.email}`}>{site.email.split('@')[0]}@<wbr />{site.email.split('@')[1]}</a>
+        </li>
+        <li class="way glass" data-reveal>
+          <span class="way__icon"><Icon name="messenger" /></span>
+          <h2>Messenger</h2>
+          <a href={site.messengerUrl} target="_blank" rel="noopener">Message our page</a>
+        </li>
+        <li class="way glass" data-reveal>
+          <span class="way__icon"><Icon name="clock" /></span>
+          <h2>Hours</h2>
+          <p>{site.hours.map((h) => <span>{h.days}: {h.time}<br /></span>)}</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <Booking title="Request your" accent="appointment" />
+
+  <section class="map section" aria-labelledby="map-title">
+    <div class="container map__wrap">
+      <div class="map__frame">
+        <iframe
+          src={site.mapsEmbedUrl}
+          title="Map showing Smile Precision Dental Clinic on MacArthur Highway, City of San Fernando"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
+      </div>
+      <div class="map__card glass-strong">
+        <p class="eyebrow">Find us</p>
+        <h2 id="map-title">{site.address.unit}, {site.address.building}</h2>
+        <address>{site.address.street}, {site.address.barangay}<br />{site.cityLine}</address>
+        <a class="btn btn--ink" href={site.mapsUrl} target="_blank" rel="noopener">Get directions<span class="btn__chip"><Icon name="arrow-up-right" /></span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .ways { margin-top: calc(-1 * var(--space-6)); position: relative; z-index: 1; }
+  .ways__grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+  .way {
+    display: grid;
+    gap: 4px;
+    align-content: start;
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+  }
+  .way__icon {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--ink); color: var(--white); margin-bottom: var(--space-3);
+  }
+  .way__icon :global(svg) { width: 18px; height: 18px; }
+  .way h2 { font: 600 var(--text-xs)/1.3 var(--font-display); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+  .way a, .way p { font: 600 var(--text-md)/1.4 var(--font-display); color: var(--ink); overflow-wrap: break-word; }
+  .way a { text-decoration: none; }
+  .way a:hover { color: var(--brand-deep); text-decoration: underline; }
+  .way p { font-size: var(--text-sm); }
+
+  .map__wrap { position: relative; display: grid; }
+  .map__frame { border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 4 / 3; background: var(--mist); }
+  .map__frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .map__card {
+    display: grid; gap: var(--space-3); justify-items: start;
+    margin: calc(-1 * var(--space-7)) var(--space-3) 0;
+    padding: var(--space-5);
+    border-radius: var(--radius-lg);
+    position: relative;
+  }
+  .map__card h2 { font-size: var(--text-lg); }
+  .map__card address { color: var(--ink-soft); }
+
+  @media (min-width: 1024px) {
+    .map__frame { aspect-ratio: 21 / 9; }
+    .map__card { position: absolute; left: var(--space-6); bottom: var(--space-6); margin: 0; max-width: 360px; }
+  }
+</style>

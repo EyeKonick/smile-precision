@@ -1,0 +1,129 @@
+---
+import { getImage } from 'astro:assets';
+import '../styles/global.css';
+import logo from '../../images/optimized/logo.png';
+import Header from '../components/sections/Header.astro';
+import Footer from '../components/sections/Footer.astro';
+import ChatWidget from '../components/ui/ChatWidget.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  /** extra schema.org object for this page (e.g. a BlogPosting) */
+  pageSchema?: Record<string, unknown>;
+  ogType?: 'website' | 'article';
+}
+const { title, description, pageSchema, ogType = 'website' } = Astro.props;
+
+const base = Astro.site ?? new URL(site.url);
+const canonical = new URL(Astro.url.pathname, base).href;
+const ogImage = new URL('/og-image.jpg', base).href;
+const logoAsset = await getImage({ src: logo, format: 'png', width: 400 });
+const logoUrl = new URL(logoAsset.src, base).href;
+
+// schema.org Dentist. No opening hours until the clinic confirms them; no ratings (Facebook
+// recommendations are not star ratings).
+const schema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Dentist',
+  name: site.legalName,
+  slogan: site.tagline,
+  description: site.description,
+  url: base.href,
+  telephone: site.phone.tel,
+  email: site.email,
+  logo: logoUrl,
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: site.addressLine,
+    addressLocality: site.address.city,
+    addressRegion: site.address.province,
+    postalCode: site.address.postalCode,
+    addressCountry: site.address.country,
+  },
+  hasMap: site.mapsUrl,
+  employee: { '@type': 'Person', name: site.dentist, jobTitle: 'Dentist' },
+  sameAs: [site.facebookUrl, site.instagramUrl],
+};
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#e8f5f8" />
+
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={site.legalName} />
+    <meta property="og:locale" content="en_PH" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1090" />
+    <meta property="og:image:height" content="572" />
+    <meta property="og:image:alt" content="A smiling patient seated in a dental chair at Smile Precision Dental Clinic" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    {pageSchema && <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />}
+    <!-- Reveal guard: hide reveal targets only while the reveal script is expected. If it hasn't reported
+         in after 2.5s, the class is removed and everything shows. Reduced-motion users never get it. -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        d.classList.add('js');
+        setTimeout(function () { if (!d.classList.contains('reveal-ready')) d.classList.remove('js'); }, 2500);
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <ChatWidget />
+    <script>
+      const root = document.documentElement;
+      if (root.classList.contains('js')) {
+        document.querySelectorAll<HTMLElement>('[data-stagger]').forEach((group) => {
+          let i = 0;
+          group.querySelectorAll<HTMLElement>('[data-reveal]').forEach((el) => {
+            if (el.parentElement?.closest('[data-stagger]') === group) el.style.setProperty('--i', String(Math.min(i++, 5)));
+          });
+        });
+        const blocks = document.querySelectorAll<HTMLElement>('[data-reveal]');
+        if (!('IntersectionObserver' in window)) {
+          blocks.forEach((el) => el.classList.add('is-in'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (!entry.isIntersecting) continue;
+                entry.target.classList.add('is-in');
+                io.unobserve(entry.target);
+              }
+            },
+            { rootMargin: '0px 0px -8% 0px', threshold: 0.1 }
+          );
+          blocks.forEach((el) => io.observe(el));
+        }
+        root.classList.add('reveal-ready');
+      }
+    </script>
+  </body>
+</html>

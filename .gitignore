@@ -1,0 +1,44 @@
+# --- build output ---
+dist/
+.astro/
+
+# --- dependencies ---
+node_modules/
+
+# --- logs and debug files ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# --- environment variables (never commit secrets) ---
+.env
+.env.*
+!.env.example
+
+# --- OS files ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- editor files (keep shared VS Code settings) ---
+.idea/
+*.swp
+*.swo
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# --- Impeccable (design tool): keep config, design.json and surfaces; ignore local runtime state ---
+.impeccable/hook.cache.json
+.impeccable/config.local.json
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/build/
+.impeccable/live/
+
+# --- local scratch ---
+*.tmp
+.cache/

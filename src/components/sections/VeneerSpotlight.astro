@@ -1,0 +1,117 @@
+---
+import { Image } from 'astro:assets';
+import Icon from '../ui/Icon.astro';
+import veneerSet from '../../../images/optimized/clinic-veneer-set.webp';
+import servicesData from '../../data/services.json';
+
+const veneers = servicesData.services.filter((s) => s.category === 'veneers');
+---
+<section class="spot section" aria-labelledby="spot-title">
+  <div class="container spot__grid">
+    <figure class="spot__photo" data-reveal>
+      <Image
+        src={veneerSet}
+        alt="A gloved hand holding a full arch of finished veneers on a model, in front of the Smile Precision Dental Clinic logo wall"
+        widths={[480, 760, 1212]}
+        sizes="(min-width: 1024px) 680px, 100vw"
+        loading="lazy"
+      />
+      <figcaption class="spot__count glass">
+        <span class="spot__num">10,000+</span>
+        <span>veneer cases at Smile Precision</span>
+      </figcaption>
+    </figure>
+
+    <div class="spot__panel" data-reveal>
+      <p class="eyebrow">Our specialty</p>
+      <h2 class="display h2" id="spot-title">Veneers, three <span class="accent">ways</span></h2>
+      <p class="spot__lede">
+        We choose the most conservative option that gives you the result you want, and we tell you honestly which one that is.
+      </p>
+      <ol class="spot__list">
+        {veneers.map((v, i) => (
+          <li>
+            <a href={`/services#${v.slug}`}>
+              <span class="spot__idx">0{i + 1}</span>
+              <span class="spot__body">
+                <strong>{v.name}</strong>
+                <span>{v.description.split('. ')[0].replace(/\.$/, '')}.</span>
+              </span>
+              <span class="spot__go"><Icon name="arrow-up-right" /></span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .spot {
+    --accent: var(--brand);
+    background: var(--deep);
+    color: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+  .spot::before {
+    content: '';
+    position: absolute;
+    width: 900px; height: 900px; left: -300px; bottom: -520px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(13, 169, 224, 0.3), transparent);
+    pointer-events: none;
+  }
+  .spot__grid { position: relative; display: grid; gap: var(--space-7); align-items: center; }
+  .spot__photo {
+    margin: 0;
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    aspect-ratio: 1212 / 915;
+  }
+  .spot__photo :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .spot__count {
+    position: absolute;
+    left: var(--space-4);
+    bottom: var(--space-4);
+    display: grid;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+    color: var(--ink);
+    font-size: var(--text-sm);
+  }
+  .spot__num { font: 300 var(--text-stat)/1 var(--font-display); letter-spacing: -0.02em; }
+
+  .spot__panel { display: grid; gap: var(--space-4); }
+  .spot .eyebrow { color: var(--seafoam); }
+  .spot__lede { color: var(--on-deep-soft); max-width: 46ch; font-size: var(--text-md); }
+  .spot__list { margin-top: var(--space-4); border-top: 1px solid rgba(255, 255, 255, 0.16); }
+  .spot__list li { border-bottom: 1px solid rgba(255, 255, 255, 0.16); }
+  .spot__list a {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--space-4);
+    align-items: start;
+    padding: var(--space-5) 0;
+    text-decoration: none;
+    color: var(--white);
+  }
+  .spot__idx { font: 300 var(--text-sm)/1.6 var(--font-display); color: var(--seafoam); }
+  .spot__body { display: grid; gap: 4px; }
+  .spot__body strong { font: 600 var(--text-lg)/1.25 var(--font-display); }
+  .spot__body span { color: var(--on-deep-soft); font-size: var(--text-sm); }
+  .spot__go {
+    display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background var(--dur-hover) var(--ease), color var(--dur-hover) var(--ease);
+  }
+  .spot__go :global(svg) { width: 18px; height: 18px; }
+  .spot__list a:hover .spot__go,
+  .spot__list a:focus-visible .spot__go { background: var(--brand); border-color: var(--brand); color: var(--ink); }
+  .spot :focus-visible { outline-color: var(--brand); }
+
+  @media (min-width: 1024px) {
+    .spot__grid { grid-template-columns: 1.15fr 1fr; gap: var(--space-8); }
+  }
+</style>

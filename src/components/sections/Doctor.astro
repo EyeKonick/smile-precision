@@ -1,0 +1,72 @@
+---
+import Placeholder from '../ui/Placeholder.astro';
+import { site } from '../../data/site';
+
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+<section class:list={['doc section', { 'doc--compact': compact }]} aria-labelledby="doc-title">
+  <div class="container doc__grid">
+    <div class="doc__portrait" data-reveal>
+      <!-- PLACEHOLDER: replace with a real portrait of Dr. Tristan Songco -->
+      <Placeholder label={`Portrait of ${site.dentist}`} icon="smile" ratio="4 / 5" tone="cyan" />
+      <div class="doc__badge glass-strong">
+        <strong>{site.dentist}</strong>
+        <span>Lead dentist · internationally trained</span>
+      </div>
+    </div>
+
+    <div class="doc__copy">
+      <div data-reveal>
+        <p class="eyebrow">Why patients choose us</p>
+        <h2 class="display h2" id="doc-title">Careful hands, honest <span class="accent">advice</span></h2>
+      </div>
+      <ol class="doc__list" data-stagger>
+        {site.promises.map((p, i) => (
+          <li data-reveal>
+            <span class="doc__n">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .doc__grid { display: grid; gap: var(--space-7); align-items: center; }
+  .doc__portrait { position: relative; max-width: 460px; }
+  .doc__badge {
+    position: absolute;
+    right: calc(-1 * var(--space-4));
+    top: var(--space-6);
+    display: grid;
+    padding: var(--space-4) var(--space-5);
+    border-radius: var(--radius-md);
+  }
+  .doc__badge strong { font: 600 var(--text-md)/1.2 var(--font-display); }
+  .doc__badge span { font-size: var(--text-xs); color: var(--ink-soft); }
+  .doc__copy { display: grid; gap: var(--space-6); }
+  .doc__copy .eyebrow { margin-bottom: var(--space-3); }
+  .doc__list { display: grid; counter-reset: none; }
+  .doc__list li {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: var(--space-4);
+    padding: var(--space-5) 0;
+    border-top: 1px solid var(--line);
+  }
+  .doc__n { font: 300 var(--text-lg)/1.2 var(--font-display); color: var(--brand-deep); }
+  .doc__list h3 { font-size: var(--text-md); margin-bottom: 4px; }
+  .doc__list p { color: var(--ink-soft); font-size: var(--text-sm); max-width: 52ch; }
+
+  @media (min-width: 1024px) {
+    .doc__grid { grid-template-columns: 5fr 7fr; gap: var(--space-8); }
+    .doc__portrait { max-width: none; }
+  }
+</style>

@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/ui/PageHeader.astro';
+import Placeholder from '../components/ui/Placeholder.astro';
+import Icon from '../components/ui/Icon.astro';
+import Doctor from '../components/sections/Doctor.astro';
+import veneerSet from '../../images/optimized/clinic-veneer-set.webp';
+import treatmentRoom from '../../images/optimized/hero-patient-chair.webp';
+import { site } from '../data/site';
+
+// The three values come straight from the clinic's own "No drill, no prep veneers" post.
+const values = [
+  { icon: 'diamond', title: 'Minimally invasive', text: 'We reach for the gentlest treatment first. Less drilling, less discomfort, less recovery.' },
+  { icon: 'tooth', title: 'Natural aesthetics', text: 'Shade, shape and length are matched to your face, so people notice your smile, not your dental work.' },
+  { icon: 'sparkle', title: 'Preserves tooth structure', text: 'Enamel doesn’t grow back. Keeping it keeps your teeth stronger and your options open.' },
+] as const;
+---
+<BaseLayout title={`About us | ${site.legalName}, San Fernando, Pampanga`} description={`Meet ${site.dentist} and the Smile Precision approach: conservative, minimally invasive cosmetic dentistry in the City of San Fernando, Pampanga.`}>
+  <PageHeader
+    eyebrow="About Smile Precision"
+    title="Precise by nature, gentle by"
+    accent="choice"
+    lede="A cosmetic dental clinic on MacArthur Highway, San Fernando, built around one idea: the best smile is the one that still looks and feels like yours."
+    image={veneerSet}
+    imageAlt="A finished full arch of veneers held up in front of the Smile Precision Dental Clinic logo wall"
+  />
+
+  <section class="story section">
+    <div class="container story__grid">
+      <p class="story__quote display" data-reveal>
+        Over <span class="accent">10,000</span> veneer cases, and every one still starts with a conversation.
+      </p>
+      <div class="story__body" data-reveal>
+        <p>
+          Smile Precision is one of Pampanga’s most recommended clinics for cosmetic dentistry. Patients come to us for veneers,
+          from no-drill, no-prep shells to hand-sculpted composite and porcelain, and for laser whitening and complete smile makeovers.
+        </p>
+        <p>
+          We work conservatively. That means a careful consultation, an honest recommendation (sometimes it’s “you don’t need veneers”),
+          and treatment that keeps as much of your natural tooth as possible. Alongside cosmetic work we provide the everyday,
+          multi-specialty care that keeps the rest of your mouth healthy.
+        </p>
+        <p>
+          You’ll find us on the {site.address.unit} of the {site.address.building}, {site.address.street}, {site.address.barangay},
+          in the {site.address.city}.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="values section bloom" aria-labelledby="values-title">
+    <div class="container">
+      <h2 class="display h2 values__title" id="values-title" data-reveal>What guides every <span class="accent">treatment</span></h2>
+      <ul class="values__grid" data-stagger>
+        {values.map((v, i) => (
+          <li class="values__card glass" data-reveal>
+            <span class="values__n">0{i + 1}</span>
+            <span class="values__icon"><Icon name={v.icon} /></span>
+            <h3>{v.title}</h3>
+            <p>{v.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Doctor />
+
+  <section class="clinic section" aria-labelledby="clinic-title">
+    <div class="container">
+      <header class="clinic__head" data-reveal>
+        <p class="eyebrow">Inside the clinic</p>
+        <h2 class="display h2" id="clinic-title">Calm, bright, and built for <span class="accent">detail</span></h2>
+      </header>
+      <div class="clinic__grid" data-stagger>
+        <figure class="clinic__main" data-reveal>
+          <Image src={treatmentRoom} alt="A treatment room at Smile Precision with a patient smiling in the chair beside the chairside monitor" widths={[480, 760, 1090]} sizes="(min-width: 1024px) 760px, 100vw" loading="lazy" />
+          <figcaption class="glass-strong">Treatment room</figcaption>
+        </figure>
+        <!-- PLACEHOLDERS: replace with real photos of the reception / building and the team -->
+        <div data-reveal><Placeholder label="Reception & waiting area" icon="pin" ratio="4 / 3" /></div>
+        <div data-reveal><Placeholder label="The Smile Precision team" icon="smile" ratio="4 / 3" tone="cyan" /></div>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  .story__grid { display: grid; gap: var(--space-6); }
+  .story__quote { font-size: clamp(1.75rem, 1.2rem + 2.2vw, 3rem); line-height: 1.05; max-width: 18ch; }
+  .story__body { display: grid; gap: var(--space-4); color: var(--ink-soft); font-size: var(--text-md); max-width: 60ch; }
+
+  .values__title { margin-bottom: var(--space-7); max-width: 16ch; }
+  .values__grid { display: grid; gap: var(--space-4); }
+  .values__card {
+    position: relative;
+    display: grid;
+    gap: var(--space-3);
+    align-content: start;
+    padding: var(--space-6) var(--space-5);
+    border-radius: var(--radius-lg);
+  }
+  .values__n { position: absolute; top: var(--space-5); right: var(--space-5); font: 300 var(--text-lg)/1 var(--font-display); color: var(--brand-deep); }
+  .values__icon {
+    display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
+    background: var(--ink); color: var(--white); margin-bottom: var(--space-4);
+  }
+  .values__icon :global(svg) { width: 24px; height: 24px; }
+  .values__card h3 { font-size: var(--text-lg); }
+  .values__card p { color: var(--ink-soft); font-size: var(--text-sm); }
+
+  .clinic__head { display: grid; gap: var(--space-3); margin-bottom: var(--space-7); }
+  .clinic__grid { display: grid; gap: var(--space-4); }
+  .clinic__main { position: relative; margin: 0; border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 1090 / 633; }
+  .clinic__main :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .clinic__main figcaption {
+    position: absolute; left: var(--space-4); bottom: var(--space-4);
+    padding: 8px 16px; border-radius: var(--radius-pill);
+    font: 600 var(--text-sm)/1.2 var(--font-display);
+  }
+
+  @media (min-width: 1024px) {
+    .story__grid { grid-template-columns: 1fr 1fr; gap: var(--space-8); align-items: start; }
+    .values__grid { grid-template-columns: repeat(3, 1fr); }
+    .values__card:nth-child(2) { translate: 0 var(--space-6); }
+    .clinic__grid { grid-template-columns: 2fr 1fr; grid-template-rows: 1fr 1fr; }
+    .clinic__main { grid-row: span 2; aspect-ratio: auto; height: 100%; }
+    .clinic__grid > div :global(.ph) { height: 100%; aspect-ratio: auto !important; }
+  }
+</style>
