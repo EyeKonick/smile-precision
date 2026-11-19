@@ -1,5 +1,6 @@
 ---
-import Placeholder from '../ui/Placeholder.astro';
+import { Image } from 'astro:assets';
+import dentistPhoto from '../../../images/stock/stock-dentist-consult.webp';
 import { site } from '../../data/site';
 
 interface Props {
@@ -10,8 +11,16 @@ const { compact = false } = Astro.props;
 <section class:list={['doc section', { 'doc--compact': compact }]} aria-labelledby="doc-title">
   <div class="container doc__grid">
     <div class="doc__portrait" data-stagger>
-      <!-- PLACEHOLDER: replace with a real portrait of Dr. Tristan Songco -->
-      <div data-reveal><Placeholder label={`Portrait of ${site.dentist}`} icon="smile" ratio="4 / 5" tone="cyan" /></div>
+      <!-- STOCK PHOTO (Unsplash, see images/stock/CREDITS.md): not Dr. Songco. Replace with his real portrait before launch. -->
+      <figure class="doc__photo zoom" data-reveal>
+        <Image
+          src={dentistPhoto}
+          alt="A dentist pointing to a dental scan on a monitor while a patient in the chair looks on"
+          widths={[420, 840]}
+          sizes="(min-width: 1024px) 460px, 90vw"
+          loading="lazy"
+        />
+      </figure>
       <div class="doc__badge glass-strong" data-reveal>
         <strong>{site.dentist}</strong>
         <span>Lead dentist · internationally trained</span>
@@ -41,6 +50,14 @@ const { compact = false } = Astro.props;
 <style>
   .doc__grid { display: grid; gap: var(--space-7); align-items: center; }
   .doc__portrait { position: relative; max-width: 460px; }
+  .doc__photo {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--mist);
+  }
+  .doc__photo :global(img) { width: 100%; height: 100%; object-fit: cover; object-position: 60% 50%; }
   .doc__badge {
     position: absolute;
     right: calc(-1 * var(--space-4));

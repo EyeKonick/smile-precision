@@ -9,6 +9,7 @@ glass nav, proof bar, cards and panels on pale aqua).
 ```
 images/               ORIGINAL Facebook screenshots (do not edit)
 images/optimized/     cropped, cleaned masters the site imports (Astro makes responsive WebP from these at build)
+images/stock/         TEMPORARY Unsplash stand-in photos + CREDITS.md (replace before launch)
 src/
   components/sections Header, Footer, Hero, Results, VeneerSpotlight, CareRow, Doctor, Reviews, Booking
   components/ui       Icon, Placeholder, CaseCard, CompareSlider, PageHeader, AppointmentForm, ChatWidget
@@ -35,7 +36,7 @@ Search the project for `REPLACE` and `PLACEHOLDER`:
 | Facebook / Messenger / Instagram links | `facebookUrl`, `messengerUrl`, `instagramUrl` in `site.ts` |
 | Opening hours | `hours` in `site.ts`, then set `hoursConfirmed: true` (the chatbot then quotes them) |
 | Real patient reviews | `src/data/testimonials.json`, then set `placeholder: false` |
-| Dentist portrait, reception, team photos, blog covers | every `<Placeholder` in `src/` |
+| Dentist portrait, reception, team photos, blog covers | currently **Unsplash stock photos** in `images/stock/` (see `CREDITS.md`; search `STOCK` in `src/`). They are not the clinic or its staff: replace with real photos |
 | Unconfirmed services | entries with `"confirmed": false` in `services.json` |
 | Blog articles | `src/content/blog/*.md` have `placeholder: true`; have the dentist review them |
 

@@ -2,7 +2,11 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PageHeader from '../../components/ui/PageHeader.astro';
-import Placeholder from '../../components/ui/Placeholder.astro';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import coverVeneers from '../../../images/stock/stock-blog-veneers.webp';
+import coverWhitening from '../../../images/stock/stock-blog-whitening.webp';
+import coverAftercare from '../../../images/stock/stock-blog-aftercare.webp';
 import Icon from '../../components/ui/Icon.astro';
 import { site } from '../../data/site';
 
@@ -10,8 +14,13 @@ const posts = (await getCollection('blog')).sort((a, b) => b.data.date.valueOf()
 const featured = posts.find((p) => p.data.featured) ?? posts[0];
 const rest = posts.filter((p) => p !== featured);
 const fmt = (d: Date) => d.toLocaleDateString('en-PH', { month: 'long', day: 'numeric', year: 'numeric' });
-type IconName = Parameters<typeof Icon>[0]['name'];
-const coverIcon: Record<string, IconName> = { Veneers: 'diamond', Whitening: 'sparkle', Aftercare: 'shield' };
+// STOCK cover photos (Unsplash, see images/stock/CREDITS.md). Swap for the clinic's own photos when available.
+const covers: Record<string, { src: ImageMetadata; alt: string }> = {
+  Veneers: { src: coverVeneers, alt: 'A dentist chatting with a smiling patient seated in a dental chair' },
+  Whitening: { src: coverWhitening, alt: 'Close-up of a smile with bright white teeth' },
+  Aftercare: { src: coverAftercare, alt: 'A dentist checking a patient’s teeth with a mirror and probe' },
+};
+const coverOf = (category: string) => covers[category] ?? covers.Veneers;
 ---
 <BaseLayout title={`Blog | Smile tips from ${site.legalName}`} description="Plain-language guides on veneers, laser whitening and aftercare from Smile Precision Dental Clinic in San Fernando, Pampanga.">
   <PageHeader
@@ -24,8 +33,9 @@ const coverIcon: Record<string, IconName> = { Veneers: 'diamond', Whitening: 'sp
   <section class="blog section">
     <div class="container">
       <article class="feat glass lift sheen" data-reveal>
-        <!-- PLACEHOLDER cover image -->
-        <Placeholder label={`Cover photo: ${featured.data.category}`} icon={coverIcon[featured.data.category] ?? 'smile'} ratio="16 / 10" tone="cyan" class="feat__cover" />
+        <div class="feat__cover zoom">
+          <Image src={coverOf(featured.data.category).src} alt={coverOf(featured.data.category).alt} widths={[600, 900, 1400]} sizes="(min-width: 1024px) 680px, 92vw" loading="eager" />
+        </div>
         <div class="feat__body">
           <p class="meta"><span>{featured.data.category}</span> · {fmt(featured.data.date)} · {featured.data.readingMinutes} min read</p>
           <h2 class="feat__title"><a href={`/blog/${featured.id}`}>{featured.data.title}</a></h2>
@@ -37,7 +47,9 @@ const coverIcon: Record<string, IconName> = { Veneers: 'diamond', Whitening: 'sp
       <ul class="list" data-stagger>
         {rest.map((p) => (
           <li class="card" data-reveal>
-            <Placeholder label={`Cover photo: ${p.data.category}`} icon={coverIcon[p.data.category] ?? 'smile'} ratio="3 / 2" />
+            <div class="card__cover zoom">
+              <Image src={coverOf(p.data.category).src} alt={coverOf(p.data.category).alt} widths={[480, 760, 1400]} sizes="(min-width: 760px) 620px, 92vw" loading="lazy" />
+            </div>
             <p class="meta"><span>{p.data.category}</span> · {p.data.readingMinutes} min read</p>
             <h2 class="card__title"><a href={`/blog/${p.id}`}>{p.data.title}</a></h2>
             <p class="card__desc">{p.data.description}</p>
@@ -70,12 +82,17 @@ const coverIcon: Record<string, IconName> = { Veneers: 'diamond', Whitening: 'sp
   .feat__title { font-size: clamp(1.625rem, 1.2rem + 1.6vw, 2.5rem); line-height: 1.1; }
   .feat__desc { color: var(--ink-soft); font-size: var(--text-md); max-width: 50ch; }
 
+  .feat__cover, .card__cover { border-radius: var(--radius-lg); overflow: hidden; background: var(--mist); }
+  .feat__cover { aspect-ratio: 16 / 10; }
+  .card__cover { aspect-ratio: 3 / 2; }
+  .feat__cover :global(img), .card__cover :global(img) { width: 100%; height: 100%; object-fit: cover; }
   .list { display: grid; gap: var(--space-6); }
   .card { display: grid; gap: var(--space-3); border-radius: var(--radius-lg); }
   .card__title { font-size: var(--text-lg); line-height: 1.2; }
   .card__desc { color: var(--ink-soft); font-size: var(--text-sm); }
   @media (hover: hover) and (pointer: fine) {
     .card:hover .card__title a, .feat:hover .feat__title a { color: var(--brand-deep); }
+    .card:hover .card__cover :global(img), .feat:hover .feat__cover :global(img) { scale: 1.035; }
   }
 
   @media (min-width: 760px) {
